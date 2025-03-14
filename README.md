@@ -38,8 +38,8 @@ Formulate a **Linear Programming Model** to determine the optimal number of unit
 ## 📈 Mathematical Model
 
 ### 🔢 Decision Variables
-- \( X \): Number of units of Product X produced \( \geq 0 \)
-- \( Y \): Number of units of Product Y produced \( \geq 0 \)
+- \( X \): Number of units of Product X produced \>=0
+- \( Y \): Number of units of Product Y produced \>=0
 
 ### 💸 Objective Function (Maximize Profit)
 \[
@@ -49,15 +49,15 @@ Formulate a **Linear Programming Model** to determine the optimal number of unit
 ### 📏 Constraints
 1. **Storage Constraint:**
 \[
-SₓX + SᵧY \leq Tₛ
+SₓX + SᵧY \<= Tₛ
 \]
 2. **Labor Constraint:**
 \[
-LₓX + LᵧY \leq Tₗ
+LₓX + LᵧY \<=Tₗ
 \]
 3. **Non-negativity Constraint:**
 \[
-X, Y \geq 0
+X, Y \>= 0
 \]
 
 ---
