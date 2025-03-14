@@ -43,7 +43,7 @@ Formulate a **Linear Programming Model** to determine the optimal number of unit
 
 ### 💸 Objective Function (Maximize Profit)
 \[
-\text{Maximize } Z = PₓX + PᵧY
+\Maximize Z = PₓX + PᵧY
 \]
 
 ### 📏 Constraints
