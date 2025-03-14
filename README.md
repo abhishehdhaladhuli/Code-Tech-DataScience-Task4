@@ -6,105 +6,104 @@ DOMAIN: DATA SCIENCE<br>
 DURATION:6 WEEKS<br>
 MENTOR:NEELA SANTHOSH<br>
 # 🚀 Maximizing Profit for a Manufacturing Company
+This script is designed to solve a linear programming problem using the `PuLP` library in Python. Linear programming is a method to achieve the best outcome in a mathematical model whose requirements are represented by linear relationships. Here, the problem focuses on optimizing production to maximize profit given certain constraints on resources such as storage space and labor hours.
 
-## 📊 Problem Statement
+### Problem Statement:
 
-A manufacturing company produces two products: **Product X** and **Product Y**. Each product contributes to the company's profit and requires specific amounts of storage space and labor hours.
+The problem involves two products, Product X and Product Y, which a company can produce. Each product has associated profits, space requirements, and labor hours required for production. The objective is to maximize the total profit while ensuring that the production does not exceed the available storage space and labor hours.
 
-The goal is to **maximize total profit** while considering the following **dynamic constraints** based on real-time inputs:
+### Code Explanation:
 
-### ✅ Profit
-- **Product X:** Generates a profit of ₹ *Pₓ* per unit.
-- **Product Y:** Generates a profit of ₹ *Pᵧ* per unit.
-
-### ✅ Storage Space
-- **Product X:** Requires *Sₓ* units of storage space per unit.
-- **Product Y:** Requires *Sᵧ* units of storage space per unit.
-- **Total available storage space:** *Tₛ* units.
-
-### ✅ Labor Hours
-- **Product X:** Requires *Lₓ* labor hours per unit.
-- **Product Y:** Requires *Lᵧ* labor hours per unit.
-- **Total available labor hours:** *Tₗ* hours.
-
----
-
-## 🎯 Objective
-
-Formulate a **Linear Programming Model** to determine the optimal number of units of **Product X** and **Product Y** to produce in order to **maximize total profit**.
-
----
-
-## 📈 Mathematical Model
-
-### 🔢 Decision Variables
-- \( X \): Number of units of Product X produced \>=0
-- \( Y \): Number of units of Product Y produced \>=0
-
-### 💸 Objective Function (Maximize Profit)
-\[
-Maximize Z = PₓX + PᵧY
-\]
-
-### 📏 Constraints
-1. **Storage Constraint:**
-\[
-SₓX + SᵧY \<= Tₛ
-\]
-2. **Labor Constraint:**
-\[
-LₓX + LᵧY \<=Tₗ
-\]
-3. **Non-negativity Constraint:**
-\[
-X, Y \>= 0
-\]
-
----
-
-
-## 🔍 Explanation of the Code
-
-Let’s break down the code step-by-step, explaining each part clearly:
-
-### 📦 **1. Importing PuLP**
+#### Importing Libraries:
 ```python
-from pulp import LpMaximize, LpProblem, LpVariable
+from pulp import LpProblem, LpMaximize, LpVariable, LpStatus
 ```
-- **`LpMaximize`**: Indicates the goal is to **maximize** the objective function (profit).
-- **`LpProblem`**: Initializes the optimization problem with a name and a goal (maximize or minimize).
-- **`LpVariable`**: Defines decision variables — the quantities of **Product X** and **Product Y** to produce.
+- `LpProblem`, `LpMaximize`, `LpVariable`, `LpStatus` are imported from the `PuLP` library.
+- `LpProblem` is used to define the problem.
+- `LpMaximize` indicates that the problem is a maximization problem.
+- `LpVariable` is used to define decision variables.
+- `LpStatus` is used to interpret the status of the solution.
 
-### 🎯 **2. Defining the Optimization Problem**
+#### Defining the Function:
 ```python
-model = LpProblem(name='profit-maximization', sense=LpMaximize)
+def optimize_production(profit_x, profit_y, space_x, space_y, total_space, labor_x, labor_y, total_labor):
 ```
-- **`name='profit-maximization'`**: A label for the problem — helpful when printing results.
-- **`sense=LpMaximize`**: Sets the objective to **maximize** profit.
+- The function `optimize_production` takes dynamic inputs related to profits, space requirements, total available space, labor hours required, and total available labor hours for the two products.
 
-### 🔢 **3. Defining Decision Variables**
+#### Defining the Linear Programming Problem:
 ```python
-X = LpVariable(name='Product_X', lowBound=0, cat='Integer')
-Y = LpVariable(name='Product_Y', lowBound=0, cat='Integer')
+model = LpProblem("Maximize_Profit", LpMaximize)
 ```
-- **`name`**: Identifies each variable clearly.
-- **`lowBound=0`**: Ensures we don’t produce negative quantities.
-- **`cat='Integer'`**: Restricts variables to whole numbers (because fractional units don’t make sense here).
+- `model` is an instance of `LpProblem` that defines the problem as "Maximize_Profit" with the objective to maximize (`LpMaximize`).
 
-### 📊 **4. Setting Dynamic Coefficients**
+#### Defining Decision Variables:
 ```python
-P_x = float(input("Enter profit per unit of Product X: "))
-P_y = float(input("Enter profit per unit of Product Y: "))
-S_x = float(input("Enter storage required per unit of Product X: "))
-S_y = float(input("Enter storage required per unit of Product Y: "))
-T_s = float(input("Enter total available storage: "))
-L_x = float(input("Enter labor hours required per unit of Product X: "))
-L_y = float(input("Enter labor hours required per unit of Product Y: "))
-T_l = float(input("Enter total available labor hours: "))
+X = LpVariable("Product_X", lowBound=0, cat='Integer')
+Y = LpVariable("Product_Y", lowBound=0, cat='Integer')
 ```
-These coefficients are now dynamic, allowing user input for flexibility.
+- `X` and `Y` are decision variables representing the number of units of Product X and Product Y to be produced.
+- `lowBound=0` ensures that the variables cannot take negative values.
+- `cat='Integer'` specifies that the variables are integers.
 
----
+#### Defining the Objective Function:
+```python
+model += profit_x * X + profit_y * Y, "Total_Profit"
+```
+- The objective function is to maximize the total profit, which is the sum of profits from Product X and Product Y. This is added to the model.
 
+#### Adding Constraints:
+```python
+model += space_x * X + space_y * Y <= total_space, "Storage_Constraint"
+model += labor_x * X + labor_y * Y <= total_labor, "Labor_Constraint"
+```
+- Two constraints are added to the model:
+  - Storage Constraint: The total space used by both products should not exceed the available storage space.
+  - Labor Constraint: The total labor hours required for both products should not exceed the available labor hours.
+
+#### Solving the Problem:
+```python
+model.solve()
+```
+- The `solve` method is called to solve the linear programming problem.
+
+#### Extracting and Returning Results:
+```python
+result = {
+    "status": LpStatus[model.status],
+    "Product_X": int(X.varValue),
+    "Product_Y": int(Y.varValue),
+    "Maximum_Profit": int(model.objective.value())
+}
+    
+return result
+```
+- The results are extracted and stored in a dictionary.
+- `LpStatus[model.status]` gives the status of the solution (e.g., optimal, infeasible).
+- `X.varValue` and `Y.varValue` give the optimal number of units for Product X and Product Y, respectively.
+- `model.objective.value()` gives the maximum profit.
+
+### Example Usage:
+```python
+if __name__ == "__main__":
+    profit_x = int(input("Enter profit per unit for Product X: "))
+    profit_y = int(input("Enter profit per unit for Product Y: "))
+    space_x = int(input("Enter space required per unit for Product X: "))
+    space_y = int(input("Enter space required per unit for Product Y: "))
+    total_space = int(input("Enter total available storage space: "))
+    labor_x = int(input("Enter labor hours required per unit for Product X: "))
+    labor_y = int(input("Enter labor hours required per unit for Product Y: "))
+    total_labor = int(input("Enter total available labor hours: "))
+
+    result = optimize_production(profit_x, profit_y, space_x, space_y, total_space, labor_x, labor_y, total_labor)
+    
+    print("\nOptimization Results:")
+    for key, value in result.items():
+        print(f"{key}: {value}")
+```
+- The `if __name__ == "__main__":` block allows the script to be run as a standalone program.
+- The user is prompted to enter the profits, space requirements, total available space, labor hours, and total available labor hours.
+- The `optimize_production` function is called with these inputs, and the results are printed.
+
+This code provides a flexible and efficient way to solve the production optimization problem using linear programming, helping the company to make informed decisions about the production quantities to maximize profit within given constraints.
 
 
