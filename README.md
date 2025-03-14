@@ -1,4 +1,4 @@
-# CodeTech-DataScience-Task-1-Optimization-Model using LinearProgramming and pulp libraries in python 
+# CodeTech-DataScience-Task-4-Optimization-Model using LinearProgramming and pulp libraries in python 
 COMPANY: CODETECH IT SOLUTIONS<br>
 NAME: ABHISHEK DHALADHULI<br>
 INTERN ID: CT6WVEQ<br>
